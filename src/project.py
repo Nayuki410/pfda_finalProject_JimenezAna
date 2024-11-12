@@ -1,5 +1,6 @@
 #importing required library
 import pygame
+import random
 
 import pygame
 pygame.init()
@@ -49,10 +50,18 @@ def main():
         Button(300, 400, 200, 50, "Quit", (100, 0, 0), (150, 0, 0))
     ]
 
+    random_cat = {1:'Art\\1.png',
+                  2:'Art\\2.png',
+                  3:'Art\\3.png',
+                  4:'Art\\4.png',
+                  5:'Art\\5.png',
+                  6:'Art\\6.png'}
     
+    #return random_cat[random.randrange(1,5)]
 
     #My_button = Button(300, 200, 200, 50, "Test", (0, 100, 0), (0, 150, 0)),
     gamestate = "Menu"
+    wish_select = None
     running = True
     while running:
                 
@@ -67,6 +76,7 @@ def main():
                             if button.text == "Wish":
                                 print("Wishing...")
                                 gamestate = "Wishing"
+                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
                             elif button.text == "Timer":
                                 print("Timing...")
                             elif button.text == "Quit":
@@ -79,40 +89,37 @@ def main():
                 clock.tick(60)
                 continue
             case "Wishing":
-                continue
+                X = 600
+                Y = 600
+                
+                # create the display surface object
+                # of specific dimension..e(X, Y).
+                scrn = pygame.display.set_mode((X, Y))
+                
+                # set the pygame window name
+                pygame.display.set_caption('image')
+                
+                # Using blit to copy content from one surface to other
+                scrn.blit(wish_select, (0, 0))
+                
+                # paint screen one time
+                pygame.display.flip()
+                status = True
+                while (status):
+                
+                # iterate over the list of Event objects
+                # that was returned by pygame.event.get() method.
+                    for i in pygame.event.get():
+                
+                        # if event object type is QUIT
+                        # then quitting the pygame
+                        # and program both.
+                        if i.type == pygame.QUIT:
+                            status = False
 
     pygame.quit()
 
 if __name__ == "__main__":
     main()
 
-
-# create the display surface object
-# of specific dimension..e(X, Y).
-#scrn = pygame.display.set_mode((X, Y))
-#Image = Buttonify('Art\\1.png',(300,400), scrn)
- 
-# set the pygame window name
-#pygame.display.set_caption('Wish')
- 
-# create a surface object, image is drawn on it.
-#imp = pygame.image.load("Art\\1.png").convert()
- 
-# Using blit to copy content from one surface to other
-#scrn.blit(imp, (0, 0))
- 
-# paint screen one time
-#pygame.display.flip()
-#status = True
-#while (status):
- 
-  # iterate over the list of Event objects
-  # that was returned by pygame.event.get() method.
-    #for i in pygame.event.get():
- 
-        # if event object type is QUIT
-        # then quitting the pygame
-        # and program both.
-        #if i.type == pygame.QUIT:
-            #status = False
  
