@@ -2,7 +2,6 @@
 import pygame
 import random
 
-import pygame
 pygame.init()
 
 class Button:
@@ -16,7 +15,7 @@ class Button:
         self.is_hovered = False
         
     def draw(self, screen):
-        # Draw button rectangle with appropriate color
+        # Draw button rectangle
         color = self.hover_color if self.is_hovered else self.color
         pygame.draw.rect(screen, color, self.rect)
         
@@ -36,18 +35,17 @@ class Button:
                 return True
         return False
 
-# Example usage
 def main():
-    # Initialize Pygame window
-    screen = pygame.display.set_mode((800, 600))
+    # Initialize Pygame window  (width, height)
+    screen = pygame.display.set_mode((600, 800))
     pygame.display.set_caption("Whisker Wishes")
     clock = pygame.time.Clock()
     
-    # Creating buttons
+    # Creating buttons  (side to side loc.,top to bottom pos., width, height)
     menu_buttons = [
-        Button(300, 200, 200, 50, "Wish", (0, 100, 0), (0, 150, 0)),
-        Button(300, 300, 200, 50, "Timer", (100, 100, 0), (150, 150, 0)),
-        Button(300, 400, 200, 50, "Quit", (100, 0, 0), (150, 0, 0))
+        Button(60, 700, 140, 50, "Wish", (0, 100, 0), (0, 150, 0)),
+        Button(230, 700, 140, 50, "Timer", (100, 100, 0), (150, 150, 0)),
+        Button(400, 700, 140, 50, "Quit", (100, 0, 0), (150, 0, 0))
     ]
 
     random_cat = {1:'Art\\1.png',
@@ -57,9 +55,6 @@ def main():
                   5:'Art\\5.png',
                   6:'Art\\6.png'}
     
-    #return random_cat[random.randrange(1,5)]
-
-    #My_button = Button(300, 200, 200, 50, "Test", (0, 100, 0), (0, 150, 0)),
     gamestate = "Menu"
     wish_select = None
     running = True
@@ -88,17 +83,35 @@ def main():
                 pygame.display.flip()
                 clock.tick(60)
                 continue
+
             case "Wishing":
                 X = 600
-                Y = 600
+                Y = 800
                 
                 # create the display surface object
                 # of specific dimension..e(X, Y).
                 scrn = pygame.display.set_mode((X, Y))
                 
                 # set the pygame window name
-                pygame.display.set_caption('image')
+                pygame.display.set_caption('Whisker Wishes')
                 
+                # Creating buttons
+                wish_buttons = [
+                    Button(300, 200, 200, 50, "Wish Again", (0, 100, 0), (0, 150, 0)),
+                    Button(300, 200, 200, 50, "Back", (0, 100, 0), (0, 150, 0))]
+
+                # Handle button events
+                for button in wish_buttons:
+                    if button.handle_event(event):
+                        if button.text == "Wish":
+                            print("Wishing...")
+                            gamestate = "Wishing"
+                            wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
+                            
+                        elif button.text == "Back":
+                            print("Going back...")
+                            gamestate = "Menu"
+
                 # Using blit to copy content from one surface to other
                 scrn.blit(wish_select, (0, 0))
                 
@@ -116,6 +129,10 @@ def main():
                         # and program both.
                         if i.type == pygame.QUIT:
                             status = False
+
+
+            case "Timer":
+                continue
 
     pygame.quit()
 
