@@ -71,11 +71,12 @@ def main():
                             if button.text == "Wish":
                                 print("Wishing...")
                                 gamestate = "Wishing"
-                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
+                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
                             elif button.text == "Timer":
                                 gamestate = "Timer"
                                 print("Timing...")
                             elif button.text == "Quit":
+                                print("Exiting...")
                                 running = False
                 # Draw everything
                 screen.fill((160, 160, 160))  # Background color
@@ -90,10 +91,6 @@ def main():
             case "Wishing":
                 X = 600
                 Y = 800
-                
-                # create the display surface object
-                # of specific dimension..e(X, Y).
-                #scrn = pygame.display.set_mode((X, Y))
                 
                 # set the pygame window name
                 pygame.display.set_caption('Whisker Wishes')
@@ -111,7 +108,7 @@ def main():
                         if button.handle_event(event):
                             if button.text == "Wish Again":
                                 print("Wishing...")
-                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
+                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
                                 
                             elif button.text == "Back":
                                 print("Going back...")
@@ -119,6 +116,8 @@ def main():
 
                 # Using blit to copy content from one surface to other
                 screen.fill((160, 160, 160))  # Background color
+                wish_screen = pygame.image.load('Art\\Wish.jpg')
+                screen.blit(wish_screen, (0, 0))
                 screen.blit(wish_select, (0, 0))
                 for button in wish_buttons:
                     button.draw(screen)
@@ -151,7 +150,7 @@ def main():
                         if button.handle_event(event):
                             if button.text == "Wish Again":
                                 print("Wishing...")
-                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
+                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
                                 
                             elif button.text == "Back":
                                 print("Going back...")
