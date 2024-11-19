@@ -127,39 +127,68 @@ def main():
 
             case "Timer":
                 
-                CLOCK = pygame.time.Clock()
+                clock = pygame.time.Clock()
                 # set the pygame window name
                 pygame.display.set_caption('Whisker Wishes')
                 
                 # Creating buttons
                 time_buttons = [
+                    Button(225, 500, 150, 50, "Start / Pause", (0, 100, 0), (0, 150, 0)),
+                    Button(35, 50, 140, 50, "Pomodoro", (0, 100, 0), (0, 150, 0)),
+                    Button(225, 50, 140, 50, "Short Break", (0, 100, 0), (0, 150, 0)),
+                    Button(425, 50, 140, 50, "Long Break", (0, 100, 0), (0, 150, 0)),
                     Button(400, 700, 140, 50, "Back", (100, 0, 0), (150, 0, 0))]
-
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        running = False
-                    # Handle button events
-                    for button in time_buttons:
-                        if button.handle_event(event):
-                            if button.text == "Wish Again":
-                                print("Wishing...")
-                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
-                                
-                            elif button.text == "Back":
-                                print("Going back...")
-                                gamestate = "Menu"
-
-                # Using blit to copy content from one surface to other
-                screen.fill((160, 160, 160))  # Background color
-                timer_background = pygame.image.load('Art\\Timer.jpg')
-                screen.blit(timer_background, (0, 0))
-                for button in time_buttons:
-                    button.draw(screen)
                 
-                # paint screen one time
-                pygame.display.flip()
-                clock.tick(60)
-                continue
+                pomodoro_length = 1500 # 1500 secs / 25 mins
+                short_break_length = 300 # 30 secs / 5 mins
+                long_break_length = 900 # 900 secs / 15 mins
+                
+                current_seconds = pomodoro_length
+                pygame.time.set_timer(pygame.USEREVENT, 1000)
+                started = False
+
+                while True:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            running = False
+                        # Handle button events
+                        for button in time_buttons:
+                            if button.handle_event(event):
+                                if button.text == "Start / Pause":
+                                    if started:
+                                        started = False
+                                        print("Pausing...")
+                                    else:
+                                        started = True
+                                        print("Starting...")
+                                if button.text == "Pomodoro":
+                                    current_seconds = pomodoro_length
+                                    started = False
+                                    print("Pomodoro Selected...")
+                                if button.text == "Short Break":
+                                    current_seconds = short_break_length
+                                    print("Short Break Selected...")
+                                if button.text == "Long Break":
+                                    current_seconds = long_break_length
+                                    print("Long Break Selected...")
+                                    
+                                elif button.text == "Back":      #Find the bug that prevents the use of the back button in the timer menu
+                                    print("Going back...")
+                                    gamestate = "Menu"
+                    if event.type == pygame.USEREVENT and started:
+                        current_seconds -= 1
+
+                    # Using blit to copy content from one surface to other
+                    screen.fill((160, 160, 160))  # Background color
+                    timer_background = pygame.image.load('Art\\Timer.jpg')
+                    screen.blit(timer_background, (0, 0))
+                    for button in time_buttons:
+                        button.draw(screen)
+                    
+                    # paint screen one time
+                    pygame.display.flip()
+                    clock.tick(60)
+                    continue
 
     pygame.quit()
 
