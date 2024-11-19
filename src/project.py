@@ -73,11 +73,14 @@ def main():
                                 gamestate = "Wishing"
                                 wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
                             elif button.text == "Timer":
+                                gamestate = "Timer"
                                 print("Timing...")
                             elif button.text == "Quit":
                                 running = False
                 # Draw everything
                 screen.fill((160, 160, 160))  # Background color
+                menu_screen = pygame.image.load('Art\\Menu.jpg')
+                screen.blit(menu_screen, (0, 0))
                 for button in menu_buttons:
                     button.draw(screen)
                 pygame.display.flip()
@@ -126,6 +129,44 @@ def main():
                 continue
 
             case "Timer":
+                X = 600
+                Y = 800
+                
+                # create the display surface object
+                # of specific dimension..e(X, Y).
+                #scrn = pygame.display.set_mode((X, Y))
+                
+                # set the pygame window name
+                pygame.display.set_caption('Whisker Wishes')
+                
+                # Creating buttons
+                time_buttons = [
+                    Button(400, 700, 140, 50, "Back", (100, 0, 0), (150, 0, 0))]
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                    # Handle button events
+                    for button in time_buttons:
+                        if button.handle_event(event):
+                            if button.text == "Wish Again":
+                                print("Wishing...")
+                                wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert()
+                                
+                            elif button.text == "Back":
+                                print("Going back...")
+                                gamestate = "Menu"
+
+                # Using blit to copy content from one surface to other
+                screen.fill((160, 160, 160))  # Background color
+                timer_screen = pygame.image.load('Art\\Timer.jpg')
+                screen.blit(timer_screen, (0, 0))
+                for button in time_buttons:
+                    button.draw(screen)
+                
+                # paint screen one time
+                pygame.display.flip()
+                clock.tick(60)
                 continue
 
     pygame.quit()
