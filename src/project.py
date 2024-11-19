@@ -80,8 +80,8 @@ def main():
                                 running = False
                 # Draw everything
                 screen.fill((160, 160, 160))  # Background color
-                menu_screen = pygame.image.load('Art\\Menu.jpg')
-                screen.blit(menu_screen, (0, 0))
+                menu_background = pygame.image.load('Art\\Menu.jpg')
+                screen.blit(menu_background, (0, 0))
                 for button in menu_buttons:
                     button.draw(screen)
                 pygame.display.flip()
@@ -89,9 +89,7 @@ def main():
                 continue
 
             case "Wishing":
-                X = 600
-                Y = 800
-                
+
                 # set the pygame window name
                 pygame.display.set_caption('Whisker Wishes')
                 
@@ -116,8 +114,8 @@ def main():
 
                 # Using blit to copy content from one surface to other
                 screen.fill((160, 160, 160))  # Background color
-                wish_screen = pygame.image.load('Art\\Wish.jpg')
-                screen.blit(wish_screen, (0, 0))
+                wish_background = pygame.image.load('Art\\Wish.jpg')
+                screen.blit(wish_background, (0, 0))
                 screen.blit(wish_select, (0, 0))
                 for button in wish_buttons:
                     button.draw(screen)
@@ -128,13 +126,8 @@ def main():
                 continue
 
             case "Timer":
-                X = 600
-                Y = 800
                 
-                # create the display surface object
-                # of specific dimension..e(X, Y).
-                #scrn = pygame.display.set_mode((X, Y))
-                
+                CLOCK = pygame.time.Clock()
                 # set the pygame window name
                 pygame.display.set_caption('Whisker Wishes')
                 
@@ -158,8 +151,8 @@ def main():
 
                 # Using blit to copy content from one surface to other
                 screen.fill((160, 160, 160))  # Background color
-                timer_screen = pygame.image.load('Art\\Timer.jpg')
-                screen.blit(timer_screen, (0, 0))
+                timer_background = pygame.image.load('Art\\Timer.jpg')
+                screen.blit(timer_background, (0, 0))
                 for button in time_buttons:
                     button.draw(screen)
                 
