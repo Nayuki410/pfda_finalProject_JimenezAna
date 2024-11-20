@@ -1,8 +1,14 @@
 #importing required library
 import pygame
 import random
+import sys
 
 pygame.init()
+
+pomodoro_length = 1500 # 1500 secs / 25 mins
+short_break_length = 300 # 30 secs / 5 mins
+long_break_length = 900 # 900 secs / 15 mins
+current_seconds = pomodoro_length
 
 class Button:
     def __init__(self, x, y, width, height, text, color, hover_color, text_color=(255, 255, 255), font_size=32):
@@ -35,6 +41,16 @@ class Button:
                 return True
         return False
 
+def handle_common_events(event, started):
+    global current_seconds
+    if event.type == pygame.USEREVENT and started:
+        current_seconds -= 1
+    if current_seconds >= 0:
+        display_seconds = current_seconds % 60
+        display_minutes = int(current_seconds / 60) % 60
+        return(display_minutes, display_seconds)
+    return (0,0)
+
 def main():
     # Initialize Pygame window  (width, height)
     screen = pygame.display.set_mode((600, 800))
@@ -57,7 +73,9 @@ def main():
     
     gamestate = "Menu"
     wish_select = None
+    started = False
     running = True
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
     while running:
                 
         match gamestate:
@@ -128,9 +146,11 @@ def main():
             case "Timer":
                 
                 clock = pygame.time.Clock()
+                
                 # set the pygame window name
                 pygame.display.set_caption('Whisker Wishes')
-                
+                timer_text = ""
+
                 # Creating buttons
                 time_buttons = [
                     Button(225, 500, 150, 50, "Start / Pause", (0, 100, 0), (0, 150, 0)),
@@ -139,44 +159,42 @@ def main():
                     Button(425, 50, 140, 50, "Long Break", (0, 100, 0), (0, 150, 0)),
                     Button(400, 700, 140, 50, "Back", (100, 0, 0), (150, 0, 0))]
                 
-                pomodoro_length = 1500 # 1500 secs / 25 mins
-                short_break_length = 300 # 30 secs / 5 mins
-                long_break_length = 900 # 900 secs / 15 mins
-                
-                current_seconds = pomodoro_length
-                pygame.time.set_timer(pygame.USEREVENT, 1000)
-                started = False
-
-                while True:
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            running = False
-                        # Handle button events
-                        for button in time_buttons:
-                            if button.handle_event(event):
-                                if button.text == "Start / Pause":
-                                    if started:
-                                        started = False
-                                        print("Pausing...")
-                                    else:
-                                        started = True
-                                        print("Starting...")
-                                if button.text == "Pomodoro":
-                                    current_seconds = pomodoro_length
+                global current_seconds
+                for event in pygame.event.get():
+                    (display_minutes, display_seconds) = handle_common_events(event, started)
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                        running = False
+                    # Handle button events
+                    for button in time_buttons:
+                        if button.handle_event(event):
+                            if button.text == "Start / Pause":
+                                if started:
                                     started = False
-                                    print("Pomodoro Selected...")
-                                if button.text == "Short Break":
-                                    current_seconds = short_break_length
-                                    print("Short Break Selected...")
-                                if button.text == "Long Break":
-                                    current_seconds = long_break_length
-                                    print("Long Break Selected...")
+                                    print("Pausing...")
+                                else:
+                                    started = True
+                                    print("Starting...")
+                            if button.text == "Pomodoro":
+                                current_seconds = pomodoro_length
+                                started = False
+                                print("Pomodoro Selected...")
+                            if button.text == "Short Break":
+                                current_seconds = short_break_length
+                                print("Short Break Selected...")
+                            if button.text == "Long Break":
+                                current_seconds = long_break_length
+                                print("Long Break Selected...")
                                     
-                                elif button.text == "Back":      #Find the bug that prevents the use of the back button in the timer menu
-                                    print("Going back...")
-                                    gamestate = "Menu"
-                    if event.type == pygame.USEREVENT and started:
-                        current_seconds -= 1
+                            elif button.text == "Back":      
+                                print("Going back...")
+                                gamestate = "Menu"
+                    timer_text = (f"{display_minutes:02}:{display_seconds:02}")
+                    # Render text
+                    font = pygame.font.Font(None, 32)
+                    text_surface = font.render(timer_text, True, (100, 0, 0), (0, 0, 0))
+                    text_rect = text_surface.get_rect(center = pygame.Rect(225, 50, 140, 50).center)
 
                     # Using blit to copy content from one surface to other
                     screen.fill((160, 160, 160))  # Background color
@@ -184,7 +202,8 @@ def main():
                     screen.blit(timer_background, (0, 0))
                     for button in time_buttons:
                         button.draw(screen)
-                    
+                    screen.blit(text_surface, text_rect)
+
                     # paint screen one time
                     pygame.display.flip()
                     clock.tick(60)
