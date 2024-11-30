@@ -9,6 +9,7 @@ pomodoro_length = 1500 # 1500 secs / 25 mins
 short_break_length = 300 # 30 secs / 5 mins
 long_break_length = 900 # 900 secs / 15 mins
 coin_wallet = 0
+owned_kittens = []
 current_seconds = pomodoro_length
 timer_enabled = False
 running = True
@@ -69,8 +70,14 @@ def get_timer_minutes_seconds():
         return(display_minutes, display_seconds)
     return (0,0)
 
+def store_kitten(kitten):
+    global owned_kittens, coin_wallet
+    coin_wallet -= 1
+    scaled_kitten = pygame.transform.scale(kitten, (100, 149))
+    owned_kittens.append(scaled_kitten)
+
 def main():
-    global running
+    global running, coin_wallet
     
     # Initialize Pygame window  (width, height)
     screen = pygame.display.set_mode((600, 800))
@@ -105,22 +112,32 @@ def main():
                 # Handle button events
                     for button in menu_buttons:
                         if button.handle_event(event):
-                            if button.text == "Wish":
+                            if button.text == "Wish" and coin_wallet > 0:
                                 print("Wishing...")
                                 gamestate = "Wishing"
                                 wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
+                                store_kitten(wish_select)
                             elif button.text == "Timer":
                                 gamestate = "Timer"
                                 print("Timing...")
                             elif button.text == "Quit":
                                 print("Exiting...")
                                 running = False
+                
                 # Draw everything
                 screen.fill((160, 160, 160))  # Background color
                 menu_background = pygame.image.load('Art\\Menu.jpg')
                 screen.blit(menu_background, (0, 0))
+                x = 0 
+                i = 0
+                for kitten in owned_kittens:
+                    screen.blit(kitten, ((x % 6) * 100, 800 - 120 - ((i // 6) * 140)))
+                    i += 1
+                    x += 1
+                
                 for button in menu_buttons:
                     button.draw(screen)
+                    
 
             case "Wishing":
 
@@ -136,9 +153,10 @@ def main():
                     # Handle button events
                     for button in wish_buttons:
                         if button.handle_event(event):
-                            if button.text == "Wish Again":
+                            if button.text == "Wish Again" and coin_wallet > 0:
                                 print("Wishing...")
                                 wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
+                                store_kitten(wish_select)
                                 
                             elif button.text == "Back":
                                 print("Going back...")
@@ -154,7 +172,7 @@ def main():
                 
 
             case "Timer":
-                global timer_enabled
+                global timer_enabled, current_seconds
                 # set the pygame window name
                 pygame.display.set_caption('Whisker Wishes')
                 timer_text = ""
@@ -173,7 +191,7 @@ def main():
                     # Handle button events
                     for button in time_buttons:
                         if button.handle_event(event):
-                            if button.text == "Start / Pause":
+                            if button.text == "Start / Pause" and current_seconds > 0:
                                 if timer_enabled:
                                     timer_enabled = False
                                     print("Pausing...")
