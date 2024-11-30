@@ -209,13 +209,16 @@ def main():
                     screen.blit(text_surface, text_rect)
 
 
-        coin_wallet_text = (f"Wallet: {coin_wallet:01}")
+        coin_wallet_text = (f": {coin_wallet:01}")
         # Render text
         font = pygame.font.Font(None, 40)
         text_surface = font.render(coin_wallet_text, True, (200, 200, 200), (0, 0, 0))
-        text_rect = text_surface.get_rect(center = pygame.Rect(450, 10, 140, 50).center)
+        text_rect = text_surface.get_rect(center = pygame.Rect(500, 10, 140, 50).center)
+        coin_icon = pygame.image.load('Art\\Coin.png')
+
 
         screen.blit(text_surface, text_rect)
+        screen.blit(coin_icon, (510, 10))
         
         # paint screen one time
         pygame.display.flip()
