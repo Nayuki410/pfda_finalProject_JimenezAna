@@ -86,9 +86,9 @@ def main():
     
     # Creating buttons  (side to side loc.,top to bottom pos., width, height)
     menu_buttons = [
-        Button(60, 700, 140, 50, "Wish", (0, 100, 0), (0, 150, 0)),
-        Button(230, 700, 140, 50, "Timer", (100, 100, 0), (150, 150, 0)),
-        Button(400, 700, 140, 50, "Quit", (100, 0, 0), (150, 0, 0))
+        Button(60, 700, 140, 50, "Wish", (114, 109, 181), (92, 86, 163)),
+        Button(230, 700, 140, 50, "Timer", (204, 114, 128), (181, 87, 102)),
+        Button(400, 700, 140, 50, "Quit", (204, 103, 82), (179, 81, 61))
     ]
 
     random_cat = {1:'Art\\1.png',
@@ -117,9 +117,11 @@ def main():
                                 gamestate = "Wishing"
                                 wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
                                 store_kitten(wish_select)
+                            elif button.text == "Wish" and coin_wallet == 0:
+                                print("Not Enough Coins!")
                             elif button.text == "Timer":
                                 gamestate = "Timer"
-                                print("Timing...")
+                                print("Timer...")
                             elif button.text == "Quit":
                                 print("Exiting...")
                                 running = False
@@ -146,8 +148,8 @@ def main():
                 
                 # Creating buttons
                 wish_buttons = [
-                    Button(60, 700, 140, 50, "Wish Again", (0, 100, 0), (0, 150, 0)),
-                    Button(400, 700, 140, 50, "Back", (100, 0, 0), (150, 0, 0))]
+                    Button(60, 700, 140, 50, "Wish Again", (114, 109, 181), (92, 86, 163)),
+                    Button(400, 700, 140, 50, "Back", (204, 114, 128), (181, 87, 102))]
 
                 for event in events:
                     # Handle button events
@@ -157,7 +159,8 @@ def main():
                                 print("Wishing...")
                                 wish_select = pygame.image.load(random_cat[random.randrange(1,7)]).convert_alpha()
                                 store_kitten(wish_select)
-                                
+                            elif button.text == "Wish Again" and coin_wallet == 0:
+                                print("Not Enough Coins!")
                             elif button.text == "Back":
                                 print("Going back...")
                                 gamestate = "Menu"
@@ -179,11 +182,11 @@ def main():
 
                 # Creating buttons
                 time_buttons = [
-                    Button(225, 500, 150, 50, "Start / Pause", (0, 100, 0), (0, 150, 0)),
-                    Button(35, 50, 140, 50, "Pomodoro", (0, 100, 0), (0, 150, 0)),
-                    Button(225, 50, 140, 50, "Short Break", (0, 100, 0), (0, 150, 0)),
-                    Button(425, 50, 140, 50, "Long Break", (0, 100, 0), (0, 150, 0)),
-                    Button(400, 700, 140, 50, "Back", (100, 0, 0), (150, 0, 0))]
+                    Button(225, 500, 150, 50, "Start / Pause", (219, 136, 149), (191, 101, 115)),
+                    Button(35, 65, 140, 50, "Pomodoro", (156, 95, 140), (128, 70, 113)),
+                    Button(225, 65, 150, 50, "Short Break", (156, 95, 140), (128, 70, 113)),
+                    Button(425, 65, 140, 50, "Long Break", (156, 95, 140), (128, 70, 113)),
+                    Button(400, 700, 140, 50, "Back", (214, 75, 110), (173, 49, 80))]
                 
                 global current_seconds
                 for event in events:
