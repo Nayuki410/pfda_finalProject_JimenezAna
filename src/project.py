@@ -53,7 +53,7 @@ def handle_common_events(events):
                 if not timer_enabled:
                     continue
                 
-                current_seconds -= 1 * 60
+                current_seconds -= 1 
                 
                 if current_seconds <= 0:
                     timer_enabled = False
